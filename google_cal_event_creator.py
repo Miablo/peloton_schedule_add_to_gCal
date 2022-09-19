@@ -5,7 +5,7 @@ from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 
 
-def _calendar_api_call(event_response_body):
+def _calendar_api_call(summary, start_time, end_time, timezone):
     """
 
     """
@@ -37,9 +37,7 @@ def _calendar_api_call(event_response_body):
 
         # # Call the Calendar API
         # new_cal_event(service)
-        # now = DateTime.datetime.utcnow().isoformat() + 'Z'  # 'Z' indicates UTC time
-        # print('Getting the upcoming 10 events')
-
+       
         # events_result = service.events().list(calendarId='primary', timeMin=now,
         #                                       maxResults=10, singleEvents=True,
         #                                       orderBy='startTime').execute()
@@ -64,10 +62,29 @@ def _calendar_api_call(event_response_body):
 ## determine what part will go into the event name ++ summary 
 ###
 ## https://developers.google.com/calendar/api/v3/reference
-def _new_cal_event(service): 
+def _new_cal_event(service, summary, start_time, end_time, timezone): 
+    # Title of the event.
     """
 
 
     """
+    event = {
+      'summary': summary,
+      'start': {
+        'dateTime': start_time,
+        'timeZone': timezone,
+      },
+      'end': {
+        'dateTime': end_time,
+        'timeZone': timezone,
+      },
+      'reminders': {
+        'useDefault': False,
+        'overrides': [
+          {'method': 'email', 'minutes': 24 * 60},
+          {'method': 'popup', 'minutes': 10},
+        ],
+      },
+    }
 
     event = service.events().insert(calendarId='primary', body=event).execute()

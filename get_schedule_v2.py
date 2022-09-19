@@ -1,11 +1,11 @@
 import requests
-import re as r
 import peloton as Peloton
 import json
 
-import time
-import datetime as DateTime
-from datetime import date
+import datetime as _date_time
+import google_cal_event_creator as _event_creator
+from dotenv import load_dotenv
+import os 
 
 """
 Created on Wed Sep 7 08:45PM 2022
@@ -15,7 +15,13 @@ Copyright 2022 Mio Diaz
 
 base_url = 'https://api.onepeloton.com'
 
-def _speloton_session(s):
+load_dotenv()
+
+USERNAME = os.environ.get('_username')
+PASSWORD = os.environ.get('_password')
+
+
+def _peloton_session(s):
 
 	'''
 	Start peloton api session using username & password
@@ -105,8 +111,8 @@ def _get_ride_details(session, ride_id, headers):
     ----------
 	session 		
 		session started in _peloton_session
-	reservation_id  
-		passed from _get_reservations
+	ride_id  
+		passed from _get_ride_id
 	headers 		
 		headers used for all calls asking for json
 
@@ -116,34 +122,19 @@ def _get_ride_details(session, ride_id, headers):
 	response = session.get(ride_url, headers=headers)
 	rides = response.json()
 
-	print(rides['ride']['description']) 
-	print(rides['ride']['duration']) # returned in seconds
-	print(rides['ride']['fitness_discipline']) # type of class (cycling, etc")
-	print(rides['ride']['title']) # class title
-	print(rides['ride']['instructor']['name'])
-	print(rides['ride']['scheduled_start_time'])
+	# print(rides['ride']['duration'])
+	# print(rides['ride']['fitness_discipline'])
+    # workout_type = rides['ride']['fitness_discipline']
+	summary = rides['ride']['title'] + " " + rides['ride']['instructor']['name']
+	start_time = rides['ride']['scheduled_start_time']
+    _get_emoji(rides['ride']['fitness_discipline'])
 
-	# event = {
- #      'summary': rides['ride']['description'],
- #      'start': {
- #        'dateTime': start_time,
- #        'timeZone': 'GMT-03:00',
- #      },
- #      'end': {
- #        'dateTime': end_time,
- #        'timeZone': 'GMT-03:00',
- #      },
- #      'recurrence': [
- #        'RRULE:FREQ=DAILY;COUNT=2'
- #      ],
- #      'reminders': {
- #        'useDefault': False,
- #        'overrides': [
- #          {'method': 'email', 'minutes': 24 * 60},
- #          {'method': 'popup', 'minutes': 10},
- #        ],
- #      },
- #    }
+def _get_end_time(start_time, duration):
+    print(start_time)
+    print(duration)
+
+def _get_emoji(fitness_discipline):
+    print(fitness_discipline)
 
 def main():
 	'''
@@ -154,8 +145,8 @@ def main():
 	s = requests.Session()
 
 	usr_info = _peloton_session(s)
-
 	usr_id = usr_info['user_id']
+
 	headers = {
         "Content-Type": "application/json",
     }
