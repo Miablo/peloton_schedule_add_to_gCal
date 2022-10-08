@@ -2,3 +2,6 @@
 credentials.json
 token.json
 .env
+*.pyc
+.DS_Store
+events.json
