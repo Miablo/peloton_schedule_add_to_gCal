@@ -70,4 +70,4 @@ def _new_cal_event(service, summary, start_time, end_time, timezone, _cal_id):
 
     event = service.events().insert(calendarId=_cal_id, body=event).execute()
     with open('events.json', 'a') as token:
-        token.writelines('Event created: %s\n' % (event.get('htmlLink')))
+        token.writelines('%s\n' % (event.get('id')))

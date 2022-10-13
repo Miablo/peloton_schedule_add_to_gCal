@@ -5,3 +5,7 @@ token.json
 *.pyc
 .DS_Store
 events.json
+*.pyc
+.DS_Store
+.DS_Store
+*.pyc
