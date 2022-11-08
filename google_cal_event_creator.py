@@ -4,6 +4,8 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 
+import os
+
 def _calendar_api_call(summary, start_time, end_time, _cal_id):
     """
 
@@ -69,5 +71,21 @@ def _new_cal_event(service, summary, start_time, end_time, timezone, _cal_id):
     }
 
     event = service.events().insert(calendarId=_cal_id, body=event).execute()
-    with open('events.json', 'a') as token:
-        token.writelines('%s\n' % (event.get('id')))
+
+    # with open('events.json', 'a') as token:
+    #     if not _is_duplicate_event(str(token), event, service, _cal_id):
+    #         token.writelines('%s\n' % (event.get('id')))
+    #         event = service.events().insert(calendarId=_cal_id, body=event).execute()
+    #         print('Event created: %s' % (event.get('htmlLink')))
+    #     else:
+    #         service.events().delete(calendarId=_cal_id, eventId=token).execute()
+
+def _is_duplicate_event(token, event, service, _cal_id):
+    with open('events.json', 'r') as r:
+        summary = service.events().get(calendarId=_cal_id, eventId=str(r)).execute()
+        if summary['summary'] == event:
+            return True
+
+    return False
+
+
