@@ -129,7 +129,7 @@ def _get_ride_details(session, ride_id, headers, start_time):
     start_time = _date_time.datetime.fromtimestamp(start_time)
     print(start_time)
     end_time = _get_end_time(start_time, duration)
-    new_format = "%Y-%m-%dT%H:%M:%S-04:00"
+    new_format = "%Y-%m-%dT%H:%M:%S-05:00"
     _cal_creator._calendar_api_call(summary, start_time.strftime(new_format), end_time.strftime(new_format), CAL_ID)
 
     '''
