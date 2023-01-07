@@ -1,5 +1,5 @@
 import requests
-import peloton as Peloton
+
 import json
 import google_cal_event_creator as _cal_creator
 import datetime as _date_time
@@ -31,10 +31,11 @@ class Emoji(enum):
     cardio = '🥊'
     running = '🏃‍♀️'
     walking = '🚶‍♀️'
-
+    yoga = '🧘'
 
 def _peloton_session(s):
     '''
+    _peloton_session
 	Start peloton api session using username & password
 	save the user id returned in the json data for usage
 	later
@@ -42,7 +43,7 @@ def _peloton_session(s):
     Parameters
     ----------
 	s
-        session.request()
+        requests.Session()
 
 	Returns
     -------
@@ -60,6 +61,7 @@ def _peloton_session(s):
 
 def _get_reservations(session, usr_id, headers):
     '''
+    _get_reservations
 	Using the session started and the user id retrieved, get
 	the reservations for this user - reservations = upcoming classes
 	on the user's schedule - send each reservation id and get the
@@ -81,6 +83,7 @@ def _get_reservations(session, usr_id, headers):
         _get_ride_id(session, reservation['peloton_id'], headers)
 
     '''
+    _get_ride_id
     Using the reservation id, get the ride id for the specified reservations
     use the ride id to retrieve ride details including instructor, description, etc
 
@@ -106,6 +109,7 @@ def _get_ride_id(session, reservation_id, headers):
     _get_ride_details(session, rides['ride_id'], headers, start_time)
 
     '''
+    _get_ride_details
     Retrieves ride details using the ride_id passed from _get_ride_id
     in order to begin building calendar api response body properties
     Parameters
@@ -133,6 +137,7 @@ def _get_ride_details(session, ride_id, headers, start_time):
     _cal_creator._calendar_api_call(summary, start_time.strftime(new_format), end_time.strftime(new_format), CAL_ID)
 
     '''
+    _get_end_time
     Calculates end time of ride based on start time and duration
 
     Parameters
@@ -151,6 +156,7 @@ def _get_end_time(start_timestamp, duration):
     return start_timestamp + _date_time.timedelta(seconds=duration)
 
     '''
+    _get_emoji
     Selects appropriate emoji for calendar event summary based on fitness
     discipline of class
     Parameters

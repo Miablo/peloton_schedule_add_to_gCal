@@ -72,6 +72,8 @@ def _new_cal_event(service, summary, start_time, end_time, timezone, _cal_id):
 
     event = service.events().insert(calendarId=_cal_id, body=event).execute()
 
+    print(event.get('id'))
+
     # with open('events.json', 'a') as token:
     #     if not _is_duplicate_event(str(token), event, service, _cal_id):
     #         token.writelines('%s\n' % (event.get('id')))
